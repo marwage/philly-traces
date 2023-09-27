@@ -7,7 +7,7 @@ import numpy as np
 def main():
     DATE_FORMAT_STR = "%Y-%m-%d %H:%M:%S"
 
-    num_gpus = 16
+    num_gpus = 64
     min_num_gpus_job = 2  # assume that every job can run with that many GPUs
     max_num_jobs = num_gpus // min_num_gpus_job
 
@@ -47,7 +47,7 @@ def main():
             jo["mw_start_time"] = jo_submit
             jo["mw_end_time"] = jo_submit + jo_runtime
 
-            if len(cur_jobs) > 0:
+            if len(cur_jobs) > 0:  # scale down
                 for cur_jo in cur_jobs:
                     if "scale_down" in cur_jobs:
                         cur_jo["scale_down"].append(jo_submit)
@@ -55,7 +55,7 @@ def main():
                         cur_jo["scale_down"] = [jo_submit]
 
             cur_jobs.append(jo)
-        else:  # resources busy
+        else:  # resources busy -> start delayed
             jo_first_fin = cur_jobs[0]
             jo["mw_start_time"] = jo_first_fin["mw_end_time"]
             jo["mw_end_time"] = jo_first_fin["mw_end_time"] + jo_runtime

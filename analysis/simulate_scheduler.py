@@ -22,7 +22,7 @@ def main():
 
     jobs_submit = sorted(jobs, key=lambda x: x["submitted_time"])
 
-    jo_zero_sub = jobs[0]["submitted_time"]
+    jo_zero_sub = jobs_submit[0]["submitted_time"]
     for jo in jobs_submit:
         jo["submitted_time"] = jo["submitted_time"] - jo_zero_sub
 

@@ -63,6 +63,17 @@ def main():
             cur_jobs.remove(jo_first_fin)
             cur_jobs.append(jo)
 
+    # no new jobs but scale ups
+    cur_jobs = sorted(cur_jobs, key=lambda x: x["mw_end_time"])
+    for i, cur_jo in enumerate(cur_jobs):
+        jo_stop_end = cur_jo["mw_end_time"]
+        if i + 1 < len(cur_jobs):
+            for jo_oth in cur_jobs[i + 1:]:
+                if "scale_up" in cur_jobs:
+                    jo_oth["scale_up"].append(jo_stop_end)
+                else:
+                    jo_oth["scale_up"] = [jo_stop_end]
+
     with open("jobs_executed.json", "w") as json_file:
         json.dump(jobs_submit, json_file, indent=4)
 

@@ -37,10 +37,8 @@ def main():
         for stop_ea in stop_earlier:
             jo_stop_end = stop_ea["mw_end_time"]
             for jo_oth in cur_jobs[1:]:
-                if "scale_up" in cur_jobs:
-                    jo_oth["scale_up"].append(jo_stop_end)
-                else:
-                    jo_oth["scale_up"] = [jo_stop_end]
+                jo_oth.setdefault("scale_up", [])
+                jo_oth["scale_up"].append(jo_stop_end)
             cur_jobs.remove(stop_ea)
 
         if len(cur_jobs) < max_num_jobs:  # resources available
@@ -49,10 +47,8 @@ def main():
 
             if len(cur_jobs) > 0:  # scale down
                 for cur_jo in cur_jobs:
-                    if "scale_down" in cur_jobs:
-                        cur_jo["scale_down"].append(jo_submit)
-                    else:
-                        cur_jo["scale_down"] = [jo_submit]
+                    cur_jo.setdefault("scale_down", [])
+                    cur_jo["scale_down"].append(jo_submit)
 
             cur_jobs.append(jo)
         else:  # resources busy -> start delayed

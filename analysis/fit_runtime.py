@@ -23,8 +23,10 @@ def dist(runtimes: [float], mean: float, std: float):
     res = scipy.stats.fit(dist, runtimes, bounds={"scale": [0, 4 * mean]})
     expon_loc = res.params.loc
     expon_scale = res.params.scale
+    expon_lambda = 1 / expon_scale
     print(f"expon loc {expon_loc}")
     print(f"expon scale {expon_scale}")
+    print(f"expon lambda {expon_lambda}")
 
     # hist
     num_bins = int(1e5)
@@ -36,7 +38,7 @@ def dist(runtimes: [float], mean: float, std: float):
 
     fig, ax = plt.subplots()
 
-    ax.scatter(bin_mids, hist, label="np", marker="x", s=0.5)
+    ax.scatter(bin_mids, hist, label="Histogram", marker="x", s=0.5)
 
     x = np.arange(10 * mean)
     y = scipy.stats.expon.pdf(x, loc=expon_loc, scale=expon_scale)
@@ -54,7 +56,7 @@ def main():
     with open("jobs.json", "r") as json_file:
         jobs = json.load(json_file)
 
-    runtimes = []  # in min
+    runtimes = []  # in seconds
     for jo in jobs:
         runti = jo["runtime"]
         runtimes.append(runti)

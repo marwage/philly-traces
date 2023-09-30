@@ -534,13 +534,13 @@ def filter_jobs(jobs):
         num_gpus = job.num_gpus
         if num_gpus is None:
             continue
-        if num_gpus < 2:
-            continue
+        #  if num_gpus < 2:
+        #      continue
         if job.status != "Pass":
             continue
         if job.run_time is None:
             continue
-        if job.run_time < 30:  # min
+        if job.run_time < 5:  # min
             continue
         #  if len(job.attempts) < 3:
         #      continue
@@ -614,7 +614,7 @@ def write_to_json(jobs):
         js.append({
             "id": j.jobid,
             "num_gpus": j.num_gpus,
-            "runtime": j.run_time * 60,  # from minutes to seconds
+            "runtime": int(j.run_time * 60),  # from minutes to seconds
             "attempts": attempts_time_str(j.attempts),
             "submitted_time": j.submitted_time.strftime(DATE_FORMAT_STR),
         })

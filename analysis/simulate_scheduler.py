@@ -7,7 +7,7 @@ import numpy as np
 def main():
     DATE_FORMAT_STR = "%Y-%m-%d %H:%M:%S"
 
-    num_gpus = 64
+    num_gpus = 16
     min_num_gpus_job = 2  # assume that every job can run with that many GPUs
     max_num_jobs = num_gpus // min_num_gpus_job
 
@@ -36,9 +36,12 @@ def main():
         stop_earlier = filter(lambda x: x["mw_end_time"] < jo_submit, cur_jobs)
         for stop_ea in stop_earlier:
             jo_stop_end = stop_ea["mw_end_time"]
-            for jo_oth in cur_jobs[1:]:
-                jo_oth.setdefault("scale_up", [])
-                jo_oth["scale_up"].append(jo_stop_end)
+            for jo_oth in cur_jobs:
+                if jo_oth == stop_ea:
+                    continue
+                if jo_stop_end > jo_oth["mw_start_time"]:
+                    jo_oth.setdefault("scale_up", [])
+                    jo_oth["scale_up"].append(jo_stop_end)
             cur_jobs.remove(stop_ea)
 
         if len(cur_jobs) < max_num_jobs:  # resources available

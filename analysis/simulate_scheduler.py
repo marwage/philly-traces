@@ -4,9 +4,14 @@ import json
 import numpy as np
 
 
+def subsample(li: list, every: int):
+    return li[::every]
+
+
 def main():
     DATE_FORMAT_STR = "%Y-%m-%d %H:%M:%S"
 
+    subsample_every = 20
     num_gpus = 16
     min_num_gpus_job = 2  # assume that every job can run with that many GPUs
     max_num_jobs = num_gpus // min_num_gpus_job
@@ -21,6 +26,7 @@ def main():
         jo["submitted_time"] = arr_time
 
     jobs_submit = sorted(jobs, key=lambda x: x["submitted_time"])
+    jobs_submit = subsample(jobs_submit, subsample_every)
 
     jo_zero_sub = jobs_submit[0]["submitted_time"]
     for jo in jobs_submit:

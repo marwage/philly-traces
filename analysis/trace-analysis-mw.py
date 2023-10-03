@@ -534,15 +534,18 @@ def filter_jobs(jobs):
         num_gpus = job.num_gpus
         if num_gpus is None:
             continue
-        #  if num_gpus < 2:
-        #      continue
+        if num_gpus < 2:
+            continue
+        if num_gpus > 16:
+            continue
         if job.status != "Pass":
             continue
         if job.run_time is None:
             continue
-        if job.run_time < 5:  # min
+        if job.run_time < 10:  # min
             continue
-        #  if len(job.attempts) < 3:
+        #  if job.run_time > 7 * 24 * 60:  # min
+        #  if job.run_time > 24 * 60:  # min
         #      continue
         if not check_attempts(job.attempts):
             continue

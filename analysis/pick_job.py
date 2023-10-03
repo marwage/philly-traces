@@ -7,7 +7,7 @@ def main():
     with open("jobs_executed.json", "r") as json_file:
         jobs = json.load(json_file)
 
-    np.random.seed(44)
+    np.random.seed(42)
     i = np.random.randint(0, len(jobs))
     jo = jobs[i]
 

@@ -12,6 +12,8 @@ def main():
     with open("jobs.json", "r") as json_file:
         jobs = json.load(json_file)
 
+    print(f"number of jobs {len(jobs)}")
+
     arrivals = []
     for jo in jobs:
         arr_date = datetime.datetime.strptime(jo["submitted_time"],

@@ -7,12 +7,9 @@ import scipy
 
 def dist(runtimes: [float], mean: float, std: float):
     dist = scipy.stats.norm
-    res = scipy.stats.fit(dist,
-                          runtimes,
-                          bounds={
-                              "loc": [0, 10 * mean],
-                              "scale": [0, 10 * std]
-                          })
+    res = scipy.stats.fit(
+        dist, runtimes, bounds={"loc": [0, 10 * mean], "scale": [0, 10 * std]}
+    )
     norm_loc = res.params.loc
     norm_scale = res.params.scale
     print(f"norm loc {norm_loc}")
@@ -52,7 +49,7 @@ def dist(runtimes: [float], mean: float, std: float):
     fig.savefig("runtimes.pdf")
 
 
-def main():
+def fit_runtime():
     with open("jobs.json", "r") as json_file:
         jobs = json.load(json_file)
 
@@ -74,4 +71,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    fit_runtime()

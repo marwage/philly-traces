@@ -8,7 +8,7 @@ import scipy
 DATE_FORMAT_STR = "%Y-%m-%d %H:%M:%S"
 
 
-def main():
+def fit_arrivals():
     with open("jobs.json", "r") as json_file:
         jobs = json.load(json_file)
 
@@ -16,8 +16,7 @@ def main():
 
     arrivals = []
     for jo in jobs:
-        arr_date = datetime.datetime.strptime(jo["submitted_time"],
-                                              DATE_FORMAT_STR)
+        arr_date = datetime.datetime.strptime(jo["submitted_time"], DATE_FORMAT_STR)
         arr_time = arr_date.timestamp()
         arrivals.append(arr_time)
 
@@ -75,4 +74,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    fit_arrivals()

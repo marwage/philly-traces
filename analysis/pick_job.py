@@ -3,7 +3,7 @@ import json
 import numpy as np
 
 
-def main():
+def pick_job():
     with open("jobs_executed_stretch16.json", "r") as json_file:
         jobs = json.load(json_file)
 
@@ -37,11 +37,13 @@ def main():
 
     num_concurrent = 0
     for other_j in jobs:
-        if other_j != jo and other_j["mw_start_time"] < start_time < other_j[
-                "mw_end_time"]:
+        if (
+            other_j != jo
+            and other_j["mw_start_time"] < start_time < other_j["mw_end_time"]
+        ):
             num_concurrent = num_concurrent + 1
     print(f"concurrent jobs at start: {num_concurrent}")
 
 
 if __name__ == "__main__":
-    main()
+    pick_job()

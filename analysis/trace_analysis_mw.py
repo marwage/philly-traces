@@ -524,17 +524,12 @@ def filter_jobs(jobs):
             continue
         if num_gpus < 2:
             continue
-        #  if num_gpus > 16:
-        #      continue
         if job.status != "Pass":
             continue
         if job.run_time is None:
             continue
         if job.run_time < 10:  # min
             continue
-        #  if job.run_time > 7 * 24 * 60:  # min
-        #  if job.run_time > 24 * 60:  # min
-        #      continue
         if not check_attempts(job.attempts):
             continue
         js.append(job)
@@ -601,6 +596,20 @@ def write_to_json(jobs):
 
     with open("jobs.json", "w") as json_file:
         json.dump(js, json_file, indent=4)
+
+
+def jobs_to_dict(jobs):
+    job_dicts = []
+    for j in jobs:
+        j_dict = {
+            "id": j.jobid,
+            "num_gpus": j.num_gpus,
+            "runtime": j.run_time * 60,  # from minutes to seconds
+            "attempts": j.attempts,
+            "submitted_time": j.submitted_time.timestamp(),
+        }
+        job_dicts.append(j_dict)
+    return job_dicts
 
 
 def main():

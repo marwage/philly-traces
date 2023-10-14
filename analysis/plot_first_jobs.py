@@ -4,7 +4,7 @@ import json
 import matplotlib.pyplot as plt
 
 
-def main():
+def plot_first_jobs():
     DATE_FORMAT_STR = "%Y-%m-%d %H:%M:%S"
 
     num_jobs = 128
@@ -46,4 +46,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    plot_first_jobs()

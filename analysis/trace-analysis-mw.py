@@ -536,8 +536,8 @@ def filter_jobs(jobs):
             continue
         if num_gpus < 2:
             continue
-        if num_gpus > 16:
-            continue
+        #  if num_gpus > 16:
+        #      continue
         if job.status != "Pass":
             continue
         if job.run_time is None:

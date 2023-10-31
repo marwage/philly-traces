@@ -8,14 +8,14 @@ def to_hours(sec: float):
     return sec / 3600
 
 
-def pick_job(jobs: list):
+def pick_job(jobs: list, num: int = 1):
     np.random.seed(42)
-    indices = np.random.randint(0, len(jobs), size=3)
+    indices = np.random.randint(0, len(jobs), size=num)
 
     for idx in indices:
         jo = jobs[idx]
         print(f"Job index: {idx}")
-        pprint.pprint(jo)
+        # pprint.pprint(jo)
 
         start_time = jo["mw_start_time"]
         print(f"start time: {to_hours(start_time)}")

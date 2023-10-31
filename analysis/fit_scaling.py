@@ -18,17 +18,17 @@ def fit_time(metric: list, metric_name: str):
     print(f"{metric_name} mean {mean_metric}")
     print(f"{metric_name} std {std_metric}")
 
-    num_bins = int(1e2)
+    num_bins = int(1e3)
     hist, edges = np.histogram(metric, bins=num_bins, density=True)
     mids = get_bin_mids(edges)
 
     fig, ax = plt.subplots()
 
-    ax.scatter(mids, hist, label="Histogram", marker="x", s=0.5)
+    ax.scatter(mids, hist, label="Histogram", marker="x")
 
     ax.set_xlabel("Times (sec)")
     ax.set_ylabel("Probability")
-    ax.set_xlim(left=0, right=5 * mean_metric)
+    ax.set_xlim(left=0, right=4 * mean_metric)
     plt.title(metric_name)
     # fig.tight_layout()
     fig.savefig(f"{metric_name}.pdf")
@@ -41,23 +41,20 @@ def fit_frequency(metric: list, metric_name: str):
     print(f"{metric_name} mean {mean_metric}")
     print(f"{metric_name} std {std_metric}")
 
-    num_bins = int(50)
-    hist, edges = np.histogram(metric, bins=num_bins, density=True)
-    mids = get_bin_mids(edges)
+    counts = [metric.count(i) for i in range(1, 21)]
 
     fig, ax = plt.subplots()
 
-    ax.scatter(mids, hist, label="Histogram", marker="x", s=2)
+    ax.scatter(np.arange(1, 21), counts, label="Histogram", marker="x")
 
     ax.set_xlabel("Frequency")
     ax.set_ylabel("Probability")
-    ax.set_xlim(left=0, right=5 * mean_metric)
     plt.title(metric_name)
-    # fig.tight_layout()
+    fig.tight_layout()
     fig.savefig(f"{metric_name}.pdf")
 
 
-def fit_scaling(jobs: list):
+def fit_scaling(jobs: list, relative_runtime: bool = False):
     num_scale_ups = []
     num_scale_downs = []
     inter_scale_up_times = []
@@ -75,18 +72,25 @@ def fit_scaling(jobs: list):
         else:
             num_scale_downs.append(0)
             num_jobs_no_scale_downs += 1
+        jo_runtime = jo["runtime"]
         if "scale_up" in jo:
             for i, sca_up in enumerate(jo["scale_up"]):
                 if i == 0:
-                    inter_scale_up_times.append(sca_up)
+                    inter_time = sca_up
                 else:
-                    inter_scale_up_times.append(sca_up - jo["scale_up"][i - 1])
+                    inter_time = sca_up - jo["scale_up"][i - 1]
+                if relative_runtime:
+                    inter_time = inter_time / jo_runtime
+                inter_scale_up_times.append(inter_time)
         if "scale_down" in jo:
             for i, sca_down in enumerate(jo["scale_down"]):
                 if i == 0:
-                    inter_scale_down_times.append(sca_down)
+                    inter_time = sca_down
                 else:
-                    inter_scale_down_times.append(sca_down - jo["scale_down"][i - 1])
+                    inter_time = sca_down - jo["scale_down"][i - 1]
+                if relative_runtime:
+                    inter_time = inter_time / jo_runtime
+                inter_scale_down_times.append(inter_time)
 
     print(f"total number of jobs {len(jobs)}")
     print(f"num jobs with no scale ups {num_jobs_no_scale_ups}")

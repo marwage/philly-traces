@@ -49,10 +49,7 @@ def dist(runtimes: [float], mean: float, std: float):
     fig.savefig("runtimes.pdf")
 
 
-def fit_runtime():
-    with open("jobs.json", "r") as json_file:
-        jobs = json.load(json_file)
-
+def fit_runtime(jobs: list):
     runtimes = []  # in seconds
     for jo in jobs:
         runti = jo["runtime"]
@@ -61,14 +58,24 @@ def fit_runtime():
 
     # stats
     mean = np.mean(runtimes)
-    print(f"mean in min {mean}")
+    print(f"runtime mean in min {mean}")
     std = np.std(runtimes)
-    print(f"std in min {std}")
+    print(f"runtime std in min {std}")
     maxi = np.max(runtimes)
-    print(f"max in min {maxi}")
+    print(f"runtime max in min {maxi}")
+
+    rng = np.random.default_rng()
+    runt = rng.choice(runtimes)
+    print(f"sampled runtime in min {runt}")
 
     dist(runtimes, mean, std)
 
 
+def main():
+    with open("jobs.json", "r") as json_file:
+        jobs = json.load(json_file)
+    fit_runtime(jobs)
+
+
 if __name__ == "__main__":
-    fit_runtime()
+    main()
